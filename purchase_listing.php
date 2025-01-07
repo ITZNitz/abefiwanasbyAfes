@@ -30,7 +30,7 @@
 
         # Mengambil data GET
         /* $model = $_GET['search']; */
-        $model = '%' . strtoupper($_GET['search']) . '%';
+        $model = "%". strtoupper($_GET['search']) . "%";
         
         ########################################################################################################################################
 
@@ -55,21 +55,21 @@
                 LEFT OUTER JOIN IMAGES ON CAR.IDIMG = IMAGES.IDIMG
                 WHERE CAR.NUMPLATE NOT IN (SELECT NUMPLATE FROM PURCHASE)
                 AND (
-                    UPPER(CAR.CARNAME) LIKE UPPER(:search)
-                    OR UPPER(MODEL.MODELNAME) LIKE UPPER(:search)
+                    UPPER(CAR.CARNAME) LIKE UPPER('NISSAN')
+                    OR UPPER(MODEL.MODELNAME) LIKE UPPER('NISSAN')
                 )
             
         ";
-
+        echo "$arahan_sql_cari  ". "$model";
         # Melaksanakan proses carian
         $laksana_arahan = oci_parse($condb, $arahan_sql_cari);
 
         # Bind parameter untuk carian
-        oci_bind_by_name($laksana_arahan, ':SEARCH', $model);
+//oci_bind_by_name($laksana_arahan, ':search', $model);
 
         # Laksanakan arahan SQL
         oci_execute($laksana_arahan);
-
+            echo oci_num_rows($laksana_arahan);
         # Jika terdapat data yang ditemui
         if (oci_fetch_all($laksana_arahan, $rekod, null, null, OCI_FETCHSTATEMENT_BY_ROW) > 0) {
             # Papar header kepada jadual
